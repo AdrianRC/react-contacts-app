@@ -10,6 +10,7 @@ class App extends Component {
     this.updateContact = this.updateContact.bind(this);
     this.removeContact = this.removeContact.bind(this);
     this.state = {
+      //sample contacts
       contacts: {
         "contact-1500081533520": {
           "firstName": "James",
@@ -18,30 +19,31 @@ class App extends Component {
           "address": "Street #111",
           "email": "james.potter@gmail.com"
         },
-        "contact-1500081647479": {
-          "firstName": "Mary",
-          "lastName": "Doe",
-          "phoneNumber": "5 (555) 555-5555",
-          "address": "Avenue 555",
-          "email": "mary.doe@aol.com"
-        },
         "contact-1500081713071": {
-          "firstName": "Peter",
-          "lastName": "Smith",
+          "firstName": "Pedro",
+          "lastName": "Ramirez",
           "phoneNumber": "9 (999) 999-9999",
           "address": "Boulevard Apt. 99",
-          "email": "peter.smith@live.com.de"
+          "email": "pedro.ramirez@hotmail.de"
+        },
+        "contact-1500081647479": {
+          "firstName": "Mary",
+          "lastName": "Smith",
+          "phoneNumber": "5 (555) 555-5555",
+          "address": "Avenue 555",
+          "email": "maria.smith@aol.com"
         }
       }
     }
   }
   addContact(contact) {
+    //takes copy of current contacts
     const contacts = {
       ...this.state.contacts
     };
-    const timestamp = Date.now();
-    contacts['contact-' + timestamp] = contact;
-    this.setState({contacts});
+    const timestamp = Date.now(); //uses timestamp as a form of an incremental and unique id
+    contacts['contact-' + timestamp] = contact; //adds the new contact under the new id
+    this.setState({contacts}); //saves the state
   }
   updateContact(key, updatedContact) {
     const contacts = {

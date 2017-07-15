@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Contact from './Contact';
 import AddContactForm from './AddContactForm'
+import PropTypes from 'prop-types';
 
 class Table extends Component {
     constructor() {
@@ -11,43 +12,53 @@ class Table extends Component {
         this.filter = this.filter.bind(this);
         this.removeFromTable = this.removeFromTable.bind(this);
         this.state = {
-            filteredContacts: ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"]
+            filteredContacts: ["contact-1500081533520", "contact-1500081713071", "contact-1500081647479"]
         }
     }
+    //searchs contacts
     filter() {
         const filteredContacts = [];
+        //for every contact in the state
         for (let contact in this.props.contacts) {
+            //checks if the contact  includes the term search criteria. Case insensitive.
             if (this.props.contacts[contact][this.filterBy.value].toUpperCase().includes(this.filterTerm.value.toUpperCase())) {
-                filteredContacts.push(contact);
+                filteredContacts.push(contact); //adds to an array
             }
         }
-        this.setState({filteredContacts});
-        this.forceUpdate();
+        this.setState({filteredContacts}); //updates the state of contacts to display
     }
+    //sorts the data in the table, takes an array, the sorted field and a boolean that determines order
     sortData = function (data, sortBy, reverse) {
         const env = this;
+        //creates an array of ids and the selected sort criteria.
         data = data.map(function(a){
             return [a, env.props.contacts[a][sortBy]]
         });
+        //sorting algorithm for both numbers and strings
         return data.sort(function (a, b) {
+            //if its a number performs substraction
             if (!isNaN(a[1])) {
                 if (reverse) {
                     return b[1] - a[1]
                 } else return a[1] - b[1]
             }
+            //else uses local compare
             if (reverse) {
                 return b[1].localeCompare(a[1])
             } else return a[1].localeCompare(b[1]);
+            //returns only the ids in order
         }).map(function(a){
             return a[0];
         });
     }
+    //changes the order by clicking twice on a header
     sortTable(newSortBy) {
         if(this.sortBy === newSortBy){
             this.reverse = !this.reverse;
         }
-        //else
-        this.sortBy = newSortBy;
+        else {
+            this.sortBy = newSortBy;
+        }
         this.forceUpdate();
     }
     createContact(event){
@@ -60,10 +71,8 @@ class Table extends Component {
             email: this.email.value
         }   
         this.props.addContact(contact);
-        this.contactForm.reset();
-        this.filter();
-        this.forceUpdate();
     }
+    //removes contact from table on delete
     removeFromTable(key) {
         const filteredContacts = this.state.filteredContacts;
         var index = filteredContacts.indexOf(key);
@@ -106,7 +115,7 @@ class Table extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {   
+                        {   //loops through the sorted and filtered contacts
                             this.sortData(this.state.filteredContacts, this.sortBy, this.reverse)
                             .map(key => <Contact
                                 key={key}
@@ -122,6 +131,13 @@ class Table extends Component {
             </div>
         );
     }
+}
+
+Table.propTypes = {
+    contacts: PropTypes.object.isRequired,
+    updateContact: PropTypes.func.isRequired,
+    addContact: PropTypes.func.isRequired,
+    removeContact: PropTypes.func.isRequired,
 }
 
 export default Table;

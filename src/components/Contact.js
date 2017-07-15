@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
 class Contact extends Component {
     constructor() {
@@ -6,11 +7,13 @@ class Contact extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
     }
+    //handles updates to the contact and calls for a state update
     handleChange(e, key){
         const contact = this.props.contacts[key];
         const updatedContact = {...contact, [e.target.name]: e.target.value};
         this.props.updateContact(key, updatedContact);
     }
+    //handles removal of a contact in both the state and the table view
     handleDelete(){
         this.props.removeFromTable(this.props.index); 
         this.props.removeContact(this.props.index);
@@ -28,6 +31,15 @@ class Contact extends Component {
             </tr>
         );
     }
+}
+
+//props validation
+Contact.propTypes = {
+    contacts: PropTypes.object.isRequired,
+    updateContact: PropTypes.func.isRequired,
+    removeFromTable: PropTypes.func.isRequired,
+    removeContact: PropTypes.func.isRequired,
+    index: PropTypes.string.isRequired
 }
 
 export default Contact;
