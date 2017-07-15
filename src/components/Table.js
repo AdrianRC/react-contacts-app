@@ -10,7 +10,6 @@ class Table extends Component {
         this.sortData = this.sortData.bind(this);
         this.filter = this.filter.bind(this);
         this.removeFromTable = this.removeFromTable.bind(this);
-        this.renderForm = this.renderForm.bind(this);
         this.state = {
             filteredContacts: ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"]
         }
@@ -73,38 +72,32 @@ class Table extends Component {
         }
         this.setState({filteredContacts});
     }
-    renderForm() {
-        return (
-            <form ref={(form) => this.contactForm = form} onSubmit={(e) => this.createContact(e)}>
-                <input type="text" ref={(input) => this.firstName = input} placeholder='First Name'required/>
-                <input type="text" ref={(input) => this.lastName = input} placeholder='Last Name'required/>
-                <input type="tel" ref={(input) => this.phoneNumber = input} placeholder='Phone Number'required/>
-                <input type="text" ref={(input) => this.address = input} placeholder='Address'required/>
-                <input type="email" ref={(input) => this.email = input} placeholder='Email'required/>
-                <input type="submit"/>
-            </form>
-        );
-    }
     render() {
         return (
             <div className="Table">
-                <div className="Filter">
-                    <input
+                <div className="form-group row">
+                    <div className="col-3">
+                        <input
                         ref={(input) => this.filterTerm = input}
                         type="text"
-                        placeholder="Filter"
+                        className="form-control"
+                        placeholder="Search..."
                         onChange={() => this.filter()}/>
-                    <select ref={(input) => this.filterBy = input} onChange={() => this.filter()}>
+                    </div>
+                    <div className="col-3">
+                    <select className="form-control" ref={(input) => this.filterBy = input} onChange={() => this.filter()}>
                         <option value="firstName">First Name</option>
                         <option value="lastName">Last Name</option>
                         <option value="phoneNumber">Phone Number</option>
                         <option value="address">Address</option>
                         <option value="email">Email</option>
                     </select>
+                    </div>
                 </div>
-                <table>
-                    <thead>
-                        <tr>
+                <table className="table">
+                    <thead className="thead-inverse">
+                        <tr className="thead-inverse">
+                            <td></td>
                             <td onClick={() => this.sortTable("firstName")}>First Name</td>
                             <td onClick={() => this.sortTable("lastName")}>Last Name</td>
                             <td onClick={() => this.sortTable("phoneNumber")}>Phone Number</td>
@@ -126,7 +119,6 @@ class Table extends Component {
                     </tbody>
                 </table>
                   <AddContactForm addContact={this.props.addContact} updateContact={this.props.updateContact} filter={this.filter}/> 
-                 {/* {this.renderForm()} */}
             </div>
         );
     }

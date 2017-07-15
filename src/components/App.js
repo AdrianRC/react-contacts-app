@@ -57,7 +57,8 @@ class App extends Component {
   }
   render() {
     return (
-      <div className="App">
+      <div className="container">
+        <h2>React Contact App</h2>
         <Table contacts={this.state.contacts} addContact={this.addContact} updateContact={this.updateContact} removeContact={this.removeContact}/>
       </div>
     );
