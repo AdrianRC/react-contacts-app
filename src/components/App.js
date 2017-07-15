@@ -7,6 +7,8 @@ class App extends Component {
   constructor() {
     super();
     this.addContact = this.addContact.bind(this);
+    this.updateContact = this.updateContact.bind(this);
+    this.removeContact = this.removeContact.bind(this);
     this.state = {
       contacts: {
         "contact-1500081533520": {
@@ -41,10 +43,22 @@ class App extends Component {
     contacts['contact-' + timestamp] = contact;
     this.setState({contacts});
   }
+  updateContact(key, updatedContact) {
+    const contacts = {
+      ...this.state.contacts
+    };
+    contacts[key] = updatedContact;
+    this.setState({contacts});
+  }
+  removeContact(key) {
+    const contacts = {...this.state.contacts};
+    delete contacts[key];
+    this.setState({ contacts });
+  }
   render() {
     return (
       <div className="App">
-        <Table contacts={this.state.contacts} addContact={this.addContact}/>
+        <Table contacts={this.state.contacts} addContact={this.addContact} updateContact={this.updateContact} removeContact={this.removeContact}/>
       </div>
     );
   }

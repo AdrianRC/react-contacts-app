@@ -9,10 +9,11 @@ class Table extends Component {
         this.reverse = false;
         this.sortData = this.sortData.bind(this);
         this.filter = this.filter.bind(this);
-        this.filteredContacts = ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"];
-        // this.state = {
-        //     filteredContacts: ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"]
-        // }
+        this.removeFromTable = this.removeFromTable.bind(this);
+        this.renderForm = this.renderForm.bind(this);
+        this.state = {
+            filteredContacts: ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"]
+        }
     }
     filter() {
         const filteredContacts = [];
@@ -50,6 +51,40 @@ class Table extends Component {
         this.sortBy = newSortBy;
         this.forceUpdate();
     }
+    createContact(event){
+        event.preventDefault();
+        const contact = {
+            firstName: this.firstName.value,
+            lastName: this.lastName.value,
+            phoneNumber: this.phoneNumber.value,
+            address: this.address.value,
+            email: this.email.value
+        }   
+        this.props.addContact(contact);
+        this.contactForm.reset();
+        this.filter();
+        this.forceUpdate();
+    }
+    removeFromTable(key) {
+        const filteredContacts = this.state.filteredContacts;
+        var index = filteredContacts.indexOf(key);
+        if(index>-1){
+            filteredContacts.splice(index,1);
+        }
+        this.setState({filteredContacts});
+    }
+    renderForm() {
+        return (
+            <form ref={(form) => this.contactForm = form} onSubmit={(e) => this.createContact(e)}>
+                <input type="text" ref={(input) => this.firstName = input} placeholder='First Name'required/>
+                <input type="text" ref={(input) => this.lastName = input} placeholder='Last Name'required/>
+                <input type="tel" ref={(input) => this.phoneNumber = input} placeholder='Phone Number'required/>
+                <input type="text" ref={(input) => this.address = input} placeholder='Address'required/>
+                <input type="email" ref={(input) => this.email = input} placeholder='Email'required/>
+                <input type="submit"/>
+            </form>
+        );
+    }
     render() {
         return (
             <div className="Table">
@@ -70,11 +105,11 @@ class Table extends Component {
                 <table>
                     <thead>
                         <tr>
-                            <td><button onClick={() => this.sortTable("firstName")}>First Name</button></td>
-                            <td><button onClick={() => this.sortTable("lastName")}>Last Name</button></td>
-                            <td><button onClick={() => this.sortTable("phoneNumber")}>Phone Number</button></td>
-                            <td><button onClick={() => this.sortTable("address")}>Address</button></td>
-                            <td><button onClick={() => this.sortTable("email")}>Email</button></td>                            
+                            <td onClick={() => this.sortTable("firstName")}>First Name</td>
+                            <td onClick={() => this.sortTable("lastName")}>Last Name</td>
+                            <td onClick={() => this.sortTable("phoneNumber")}>Phone Number</td>
+                            <td onClick={() => this.sortTable("address")}>Address</td>
+                            <td onClick={() => this.sortTable("email")}>Email</td>                            
                         </tr>
                     </thead>
                     <tbody>
@@ -84,11 +119,14 @@ class Table extends Component {
                                 key={key}
                                 index={key}
                                 updateContact={this.props.updateContact}
+                                removeFromTable={this.removeFromTable}
+                                removeContact={this.props.removeContact}
                                 contacts={this.props.contacts}/>)
 }
                     </tbody>
                 </table>
-                 <AddContactForm addContact={this.props.addContact} filter={this.filter}/>
+                  <AddContactForm addContact={this.props.addContact} updateContact={this.props.updateContact} filter={this.filter}/> 
+                 {/* {this.renderForm()} */}
             </div>
         );
     }
