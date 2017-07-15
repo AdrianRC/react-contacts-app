@@ -34,3 +34,7 @@ h3, h2 {
     float:right;
     margin-bottom: 2%;
 }
+
+table {
+    transition: all 0.5s;
+}
