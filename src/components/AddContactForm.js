@@ -57,6 +57,7 @@ class AddContactForm extends Component {
     }
 }
 
+//props validation
 AddContactForm.propTypes = {
     addContact: PropTypes.func.isRequired
 }
