@@ -5,18 +5,23 @@ import AddContactForm from './AddContactForm'
 class Table extends Component {
     constructor() {
         super();
-        this.filteredContacts = ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"];
         this.sortBy = "firstName";
         this.reverse = false;
         this.sortData = this.sortData.bind(this);
+        this.filter = this.filter.bind(this);
+        this.filteredContacts = ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"];
+        // this.state = {
+        //     filteredContacts: ["contact-1500081533520", "contact-1500081647479", "contact-1500081713071"]
+        // }
     }
     filter() {
-        this.filteredContacts = [];
+        const filteredContacts = [];
         for (let contact in this.props.contacts) {
             if (this.props.contacts[contact][this.filterBy.value].toUpperCase().includes(this.filterTerm.value.toUpperCase())) {
-                this.filteredContacts.push(contact);
+                filteredContacts.push(contact);
             }
         }
+        this.setState({filteredContacts});
         this.forceUpdate();
     }
     sortData = function (data, sortBy, reverse) {
@@ -74,7 +79,7 @@ class Table extends Component {
                     </thead>
                     <tbody>
                         {   
-                            this.sortData(this.filteredContacts, this.sortBy, this.reverse)
+                            this.sortData(this.state.filteredContacts, this.sortBy, this.reverse)
                             .map(key => <Contact
                                 key={key}
                                 index={key}
@@ -83,7 +88,7 @@ class Table extends Component {
 }
                     </tbody>
                 </table>
-                 <AddContactForm addContact={this.props.addContact} filter={this.filter} filteredContacts={React.cloneElement(this.filteredContacts)}/>
+                 <AddContactForm addContact={this.props.addContact} filter={this.filter}/>
             </div>
         );
     }
